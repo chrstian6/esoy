@@ -36,10 +36,13 @@ export default function InquireSection() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    // Preserve spaces for package and facebook; trim others
+    // Preserve spaces for package, facebook, and address; trim others
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "package" || name === "facebook" ? value : value.trim(),
+      [name]:
+        name === "package" || name === "facebook" || name === "address"
+          ? value
+          : value.trim(),
     }));
   };
 
@@ -184,6 +187,7 @@ export default function InquireSection() {
                   onChange={handleInputChange}
                   className="bg-white text-black border-gray-300 text-base sm:text-lg w-full"
                   required
+                  maxLength={200}
                 />
               </div>
               <div className="space-y-2">
