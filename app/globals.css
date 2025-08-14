@@ -133,3 +133,30 @@
   height: 100%;
   background-color: #000;
 }
+
+.slideshow-container {
+  transition: opacity 1s ease-in-out;
+  will-change: opacity; /* Hint to browser for optimization */
+}
+
+/* Keep your other animations the same */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Apply to your animated elements */
+.logo-animate {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+.heading-animate {
+  animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+.buttons-animate {
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}

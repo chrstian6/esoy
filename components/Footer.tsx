@@ -20,16 +20,20 @@ export default function Footer() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full text-white hover:bg-white"
+                className="rounded-full text-white hover:bg-white cursor-pointer"
               >
-                <Instagram className="h-5 w-5" />
+                <a href="https://www.instagram.com/gln_photos/" target="_blank">
+                  <Instagram className="h-5 w-5" />
+                </a>
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full text-white hover:bg-white"
+                className="rounded-full text-white hover:bg-white cursor-pointer"
               >
-                <Facebook className="h-5 w-5" />
+                <a href="https://www.facebook.com/ResumaGleen" target="_blank">
+                  <Facebook className="h-5 w-5 cursor-pointer" />
+                </a>
               </Button>
             </div>
           </div>

@@ -1,10 +1,15 @@
-// components/section/ProfileSection.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useModalStore } from "@/lib/stores";
 import { getUserProfile } from "@/action/userAction";
 import { checkAuth, getSessionData } from "@/action/authActions";
@@ -171,14 +176,28 @@ export default function ProfileSection() {
                 "Professional photographer specializing in weddings, events, and portraits."}
             </p>
             <div className="flex items-center justify-center md:justify-start gap-4 mt-4 w-full">
-              <Button
-                variant="default"
-                size="lg"
-                className="flex-1 max-w-xs rounded-md hover:bg-primary/90 transition-colors"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              >
-                Book a Schedule
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="default"
+                      size="lg"
+                      className="flex-1 max-w-xs rounded-md hover:bg-primary/90 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.scrollTo({ top: 5300, behavior: "smooth" })
+                      }
+                    >
+                      Book a Schedule
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      Sorry, this button is under development. book me at
+                      pricing section.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <span className="text-muted-foreground mx-2">|</span>
               <div className="flex items-center gap-3">
                 <Button
@@ -188,7 +207,7 @@ export default function ProfileSection() {
                   asChild
                 >
                   <a
-                    href="#"
+                    href="https://www.facebook.com/ResumaGleen"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
@@ -210,7 +229,7 @@ export default function ProfileSection() {
                   asChild
                 >
                   <a
-                    href="#"
+                    href="https://www.instagram.com/gln_photos/"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"

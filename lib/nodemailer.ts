@@ -43,7 +43,6 @@ export async function sendEmail({ to, subject, html }: EmailOptions) {
       subject,
       html,
     });
-    console.log(`Email sent successfully to ${to}`);
     return { success: true };
   } catch (error) {
     console.error("Error sending email:", error);
