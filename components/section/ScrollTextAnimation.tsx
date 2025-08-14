@@ -45,7 +45,6 @@ export default function StickyTextSection() {
     const handleScroll = () => {
       if (!isActive) return;
 
-      const containerRect = container.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
       // Calculate progress through the container

@@ -102,7 +102,7 @@ export default function CategoryManagementModal() {
     <>
       <Dialog
         open={isCategoryManagementOpen}
-        onOpenChange={(open) => !isLoading && closeCategoryManagement()}
+        onOpenChange={() => !isLoading && closeCategoryManagement()}
       >
         <DialogContent className="max-w-[90vw] sm:max-w-[425px]">
           <DialogHeader>
@@ -157,8 +157,8 @@ export default function CategoryManagementModal() {
               Delete Category
             </DialogTitle>
             <DialogDescription className="text-sm sm:text-base">
-              Are you sure you want to delete the category "
-              {categoryToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete the category &quot;
+              {categoryToDelete?.name}&quot;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-4">

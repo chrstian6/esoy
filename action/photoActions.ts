@@ -4,7 +4,6 @@ import dbConnect from "@/lib/mongodb";
 import PhotoModel from "@/models/Photo";
 import { Photo } from "@/types/Photo";
 
-// Interface for the transformed photo output (with string IDs)
 interface PhotoDTO {
   _id: string;
   userId: string;
@@ -26,7 +25,12 @@ type PhotoActionResult<T = any> = {
   currentPage?: number;
 };
 
-// Get Photos by Category (public access)
+// Cache for categories
+let categoriesCache: string[] | null = null;
+let categoriesCacheTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Get Photos by Category with caching
 export async function getPhotosByCategory(
   category: string,
   limit = 20,
@@ -40,15 +44,14 @@ export async function getPhotosByCategory(
     await dbConnect();
     const skip = (page - 1) * limit;
 
-    const photos = await PhotoModel.find({ category: category.trim() })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean<Photo[]>();
-
-    const totalCount = await PhotoModel.countDocuments({
-      category: category.trim(),
-    });
+    const [photos, totalCount] = await Promise.all([
+      PhotoModel.find({ category: category.trim() })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean<Photo[]>(),
+      PhotoModel.countDocuments({ category: category.trim() }),
+    ]);
 
     return {
       success: true,
@@ -77,19 +80,31 @@ export async function getPhotosByCategory(
   }
 }
 
-// Get All Categories (public access)
+// Get All Categories with caching
 export async function getAllCategories(): Promise<PhotoActionResult> {
   try {
+    // Return cached categories if available and not expired
+    if (categoriesCache && Date.now() - categoriesCacheTime < CACHE_DURATION) {
+      return { success: true, categories: categoriesCache };
+    }
+
     await dbConnect();
     const categories = await PhotoModel.distinct("category");
+
     // Filter categories to only include those with at least one photo
-    const nonEmptyCategories = [];
-    for (const category of categories) {
-      const count = await PhotoModel.countDocuments({ category });
-      if (count > 0) {
-        nonEmptyCategories.push(category);
-      }
-    }
+    const countPromises = categories.map((category) =>
+      PhotoModel.countDocuments({ category })
+    );
+    const counts = await Promise.all(countPromises);
+
+    const nonEmptyCategories = categories.filter(
+      (_, index) => counts[index] > 0
+    );
+
+    // Update cache
+    categoriesCache = nonEmptyCategories;
+    categoriesCacheTime = Date.now();
+
     return { success: true, categories: nonEmptyCategories };
   } catch (error: unknown) {
     console.error("Error fetching categories:", error);

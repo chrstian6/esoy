@@ -26,7 +26,7 @@ import { useModalStore } from "@/lib/stores";
 import { getUserEmail } from "@/action/userAction";
 import { checkAuth } from "@/action/authActions";
 import { sendOtp, verifyOtp } from "@/action/otpActions";
-import { Loader2 } from "lucide-react"; // Using Lucide's spinner instead
+import { Loader2 } from "lucide-react";
 
 const emailSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -193,7 +193,11 @@ export default function LoginModal() {
       {/* Login Modal */}
       <Dialog
         open={isLoginModalOpen}
-        onOpenChange={(open) => !isLoading.send && closeLoginModal()}
+        onOpenChange={(open) => {
+          if (!isLoading.send) {
+            if (!open) closeLoginModal();
+          }
+        }}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -239,7 +243,11 @@ export default function LoginModal() {
       {/* OTP Modal */}
       <Dialog
         open={isOtpModalOpen}
-        onOpenChange={(open) => !isLoading.verify && closeOtpModal()}
+        onOpenChange={(open) => {
+          if (!isLoading.verify) {
+            if (!open) closeOtpModal();
+          }
+        }}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -300,7 +308,7 @@ export default function LoginModal() {
                   </p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Didn't receive a code?
+                    Didn&apos;t receive a code?
                   </p>
                 )}
               </div>

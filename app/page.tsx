@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import ProfileSection from "@/components/section/ProfileSection";
 import TabsSection, { TabCategory } from "@/components/section/TabsSection";
@@ -11,7 +11,6 @@ import PortraitsSections from "@/components/section/PortraitsSection";
 import StickyTextSection from "@/components/StickyTextSection";
 import InquireSection from "@/components/section/InquireSection";
 import NewsletterSection from "@/components/section/NewsLetterSection";
-import Footer from "@/components/Footer";
 import Image from "next/image";
 
 export default function Portfolio() {
@@ -163,10 +162,14 @@ export default function Portfolio() {
       <StickyTextSection />
 
       <ProfileSection />
-      <TabsSection activeTab={activeTab} setActiveTab={setActiveTab} />
-      <PricingSection />
-      <InquireSection />
-      <NewsletterSection />
+
+      {/* Wrap components that might use useSearchParams in Suspense */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <TabsSection activeTab={activeTab} setActiveTab={setActiveTab} />
+        <PricingSection />
+        <NewsletterSection />
+        <InquireSection />
+      </Suspense>
 
       {/* === Footer Section === */}
       {/* === Modals === */}

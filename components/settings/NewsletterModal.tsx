@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -117,18 +117,7 @@ export default function NewsletterModal({
     );
   }, [formData.specificEmail, subscribers]);
 
-  // Generate promo code when recipient type changes
-  useEffect(() => {
-    if (
-      formData.includePromo &&
-      !promoCodeDetails.code &&
-      !promoCodeDetails.isCustom
-    ) {
-      generatePromoCode();
-    }
-  }, [formData.includePromo, formData.recipientType]);
-
-  const generatePromoCode = () => {
+  const generatePromoCode = useCallback(() => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let code = "";
     for (let i = 0; i < 8; i++) {
@@ -141,7 +130,24 @@ export default function NewsletterModal({
       isCustom: false,
     }));
     setValidationResult(null);
-  };
+  }, [formData.recipientType]);
+
+  // Generate promo code when recipient type changes
+  useEffect(() => {
+    if (
+      formData.includePromo &&
+      !promoCodeDetails.code &&
+      !promoCodeDetails.isCustom
+    ) {
+      generatePromoCode();
+    }
+  }, [
+    formData.includePromo,
+    formData.recipientType,
+    promoCodeDetails.code,
+    promoCodeDetails.isCustom,
+    generatePromoCode,
+  ]);
 
   const handleCustomPromoCode = (code: string) => {
     setPromoCodeDetails((prev) => ({

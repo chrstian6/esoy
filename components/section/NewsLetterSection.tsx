@@ -47,7 +47,7 @@ export default function NewsletterSection() {
 
         {isSubscribed ? (
           <div className="bg-green-50 text-green-800 p-4 rounded-lg max-w-md mx-auto">
-            <p>You're subscribed! Thank you for joining our newsletter.</p>
+            <p>You&apos;re subscribed! Thank you for joining our newsletter.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="max-w-md mx-auto flex gap-2">

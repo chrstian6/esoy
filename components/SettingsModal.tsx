@@ -42,7 +42,6 @@ export default function SettingsModal() {
     closeNewsletterModal,
     isPromoCodeManagementOpen,
     openPromoCodeManagement,
-    closePromoCodeManagement,
   } = useModalStore();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -139,7 +138,7 @@ export default function SettingsModal() {
     <>
       <Dialog
         open={isSettingsModalOpen}
-        onOpenChange={(open) => !isLoading && closeSettingsModal()}
+        onOpenChange={() => !isLoading && closeSettingsModal()}
       >
         <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] flex flex-col">
           {/* Fixed Header */}

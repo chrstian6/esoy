@@ -5,7 +5,6 @@ import PhotoModel from "@/models/Photo";
 import User from "@/models/User";
 import { Types } from "mongoose";
 import { checkAuth } from "@/action/authActions";
-import { Photo } from "@/types/Photo";
 import { revalidatePath } from "next/cache";
 
 // Type definitions
@@ -24,15 +23,15 @@ interface PhotoDTO {
   __v?: number;
 }
 
-type PhotoActionResult<T = any> = {
+type PhotoActionResult = {
   success: boolean;
   message?: string;
-  data?: T;
   photos?: PhotoDTO[];
   categories?: string[];
   totalCount?: number;
   totalPages?: number;
   currentPage?: number;
+  data?: { photoIds?: string[] };
 };
 
 // Constants
@@ -77,7 +76,7 @@ async function getAuthenticatedUserId(
 // POST /api/upload
 export async function POST(
   request: NextRequest
-): Promise<NextResponse<PhotoActionResult<{ photoIds: string[] }>>> {
+): Promise<NextResponse<PhotoActionResult>> {
   try {
     // Check authentication
     const authResult = await checkAuth();
@@ -179,13 +178,12 @@ export async function POST(
         photoIds: createdPhotos.map((p) => p._id.toString()),
       },
     });
-  } catch (error: unknown) {
-    console.error("Error uploading photos:", error);
+  } catch (err: unknown) {
+    console.error("Error uploading photos:", err);
     return NextResponse.json(
       {
         success: false,
-        message:
-          error instanceof Error ? error.message : "Failed to upload photos",
+        message: err instanceof Error ? err.message : "Failed to upload photos",
       },
       { status: 500 }
     );
@@ -256,13 +254,12 @@ export async function DELETE(
       success: true,
       message: "Photo deleted successfully",
     });
-  } catch (error: unknown) {
-    console.error("Error deleting photo:", error);
+  } catch (err: unknown) {
+    console.error("Error deleting photo:", err);
     return NextResponse.json(
       {
         success: false,
-        message:
-          error instanceof Error ? error.message : "Failed to delete photo",
+        message: err instanceof Error ? err.message : "Failed to delete photo",
       },
       { status: 500 }
     );

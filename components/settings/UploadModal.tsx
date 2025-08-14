@@ -26,6 +26,13 @@ import {
   DialogContent as PreviewDialogContent,
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
+
+interface UploadResponse {
+  success: boolean;
+  message?: string;
+  [key: string]: unknown;
+}
 
 export default function UploadModal() {
   const { isUploadPhotosOpen, closeUploadPhotos } = useModalStore();
@@ -37,13 +44,12 @@ export default function UploadModal() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Cleanup previews when modal closes
+  // Cleanup previews when modal closes or files change
   useEffect(() => {
     return () => {
       files.forEach((fileObj) => URL.revokeObjectURL(fileObj.preview));
-      setFiles([]);
     };
-  }, [isUploadPhotosOpen]);
+  }, [isUploadPhotosOpen, files]);
 
   const handleRefresh = () => {
     window.location.reload();
@@ -61,7 +67,7 @@ export default function UploadModal() {
 
     // Validate files
     const validTypes = ["image/jpeg", "image/png", "image/webp"];
-    const maxSize = 50 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     for (const fileObj of newFiles) {
       if (!validTypes.includes(fileObj.file.type)) {
         toast.error("Invalid file type", {
@@ -145,7 +151,7 @@ export default function UploadModal() {
         body: formData,
       });
 
-      let result: any = {};
+      let result: UploadResponse;
       try {
         result = await response.json();
       } catch {
@@ -178,10 +184,7 @@ export default function UploadModal() {
           },
           duration: 10000, // Show for 10 seconds
         });
-        setFiles((prev) => {
-          prev.forEach((fileObj) => URL.revokeObjectURL(fileObj.preview));
-          return [];
-        });
+        setFiles([]);
         setCategory("");
         setCustomCategory("");
         closeUploadPhotos();
@@ -202,6 +205,7 @@ export default function UploadModal() {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <Dialog open={isUploadPhotosOpen} onOpenChange={closeUploadPhotos}>
@@ -237,9 +241,11 @@ export default function UploadModal() {
                         className="relative cursor-pointer"
                         onClick={() => openPreview(index)}
                       >
-                        <img
+                        <Image
                           src={fileObj.preview}
                           alt={`Preview ${index + 1}`}
+                          width={100}
+                          height={100}
                           className="h-24 w-full object-cover rounded-md border border-gray-300 hover:opacity-90 transition-opacity"
                         />
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 rounded-md">
@@ -341,9 +347,11 @@ export default function UploadModal() {
           <div className="relative w-full h-full">
             {files.length > 0 && (
               <>
-                <img
+                <Image
                   src={files[currentPreviewIndex].preview}
                   alt={`Preview ${currentPreviewIndex + 1}`}
+                  width={800}
+                  height={600}
                   className="w-full h-full object-contain max-h-[80vh]"
                 />
                 <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">

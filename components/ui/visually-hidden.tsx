@@ -6,5 +6,5 @@ interface VisuallyHiddenProps
 }
 
 export const VisuallyHidden = ({ children, ...props }: VisuallyHiddenProps) => {
-  return <RadixVisuallyHidden></RadixVisuallyHidden>;
+  return <RadixVisuallyHidden {...props}>{children}</RadixVisuallyHidden>;
 };

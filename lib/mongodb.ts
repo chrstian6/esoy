@@ -38,9 +38,7 @@ async function dbConnect(): Promise<typeof mongoose> {
   try {
     mongooseCache.conn = await mongooseCache.promise;
     if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
-      const collections = await mongoose.connection.db
-        .listCollections()
-        .toArray();
+      console.log("MongoDB connected to glndb database");
     }
   } catch (e) {
     mongooseCache.promise = null;

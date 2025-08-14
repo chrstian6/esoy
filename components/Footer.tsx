@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -81,20 +81,6 @@ export default function Footer() {
           <p className="text-sm text-gray-400">
             © {new Date().getFullYear()} GLN Photos. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link
-              href="#"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="#"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Terms of Service
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

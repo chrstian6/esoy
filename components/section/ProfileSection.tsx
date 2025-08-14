@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useModalStore } from "@/lib/stores";
 import { getUserProfile } from "@/action/userAction";
 import { checkAuth, getSessionData } from "@/action/authActions";
-import { Loader2 } from "lucide-react";
 
 export default function ProfileSection() {
   const { openLoginModal, openSettingsModal } = useModalStore();

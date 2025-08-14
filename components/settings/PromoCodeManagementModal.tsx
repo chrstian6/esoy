@@ -1,4 +1,3 @@
-// components/settings/PromoCodeManagementModal.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,6 +57,7 @@ export default function PromoCodeManagementModal() {
           toast.error(result.message || "Failed to fetch promo codes");
         }
       } catch (error) {
+        console.error("Error fetching promo codes:", error);
         toast.error("Error fetching promo codes");
       } finally {
         setIsLoading(false);
